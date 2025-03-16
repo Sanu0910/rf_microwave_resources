@@ -1,5 +1,5 @@
 # rf_microwave_resources
-Category	Icon Example	HTML Code
+Category	  Icon Example	  HTML Code
 📡 Antenna / RF Tower	📡	<i class="fa-solid fa-broadcast-tower"></i>
 📶 Wireless Signal	📶	<i class="fa-solid fa-signal"></i>
 📊 Data Analysis	📊	<i class="fa-solid fa-chart-line"></i>
