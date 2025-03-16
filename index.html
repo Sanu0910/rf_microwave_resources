@@ -8,13 +8,25 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <div id="loader"></div>
+
     <div class="navbar">
-        <img src="logo.png" alt="RFWave Resources Logo" height="60">
-        <span>RFWave Resources</span>
+      <button id="dark-mode-toggle">
+        <i class="fa-solid fa-moon"></i>
+      </button>
+      <img src="logo.png" alt="RFWave Resources Logo" height="60">
+      <span>RFWave Resources</span>
     </div>
 
-    <div class="container">
-        <h1>Welcome to RFWave Resources</h1>
+    <div class="hero" id="hero">
+        <div class="hero-content">
+            <h1>Welcome to RFWave Resources</h1>
+            <p>Your one-stop destination for RF & Microwave study materials.</p>
+            <a href="#resources" class="cta-button">Explore Resources</a>
+        </div>
+    </div>
+
+    <div class="container" id="resources">
         <p class="description">A curated collection of valuable study resources for RF and Microwave Engineering.</p>
 
         <h2>Basics of Electromagnetics & Motivation</h2>
@@ -36,6 +48,8 @@
                 <p>Inspirational talks by experts in electromagnetics and science.</p>
             </div>
         </div>
+
+        <input type="text" id="search-bar" placeholder="Search resources..." onkeyup="searchResources()">
 
         <h2>Online Study Resources</h2>
         <div class="resources">
@@ -92,5 +106,10 @@
     <div class="footer">
         © 2025 RFWave Resources | Maintained by <a href="https://github.com/Sanu0910" target="_blank">Sanu Roy</a>
     </div>
+
+    <button onclick="topFunction()" id="back-to-top"><i class="fa-solid fa-arrow-up"></i></button>
+
+    <script src="script.js"></script>
+
 </body>
 </html>
