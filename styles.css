@@ -83,3 +83,126 @@ h1 {
     color: #ffcc00;
     text-decoration: none;
 }
+.hero {
+    background: url('background.jpg') center/cover no-repeat;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    font-size: 1.5rem;
+    font-weight: bold;
+    flex-direction: column;
+}
+
+.hero-content h1 {
+    font-size: 2.5rem;
+}
+
+.hero-content p {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+}
+
+.cta-button {
+    background: #ffcc00;
+    color: #004080;
+    padding: 12px 25px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.cta-button:hover {
+    background: #e6b800;
+}
+:root {
+    --bg-color: #f8f9fa;
+    --text-color: #333;
+    --card-bg: #f4f4f4;
+}
+
+.dark-mode {
+    --bg-color: #1a1a1a;
+    --text-color: #f8f9fa;
+    --card-bg: #333;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+.card {
+    background: var(--card-bg);
+}
+
+#dark-mode-toggle {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    margin-left: 15px;
+}
+#search-bar {
+    width: 80%;
+    padding: 10px;
+    border: 2px solid #004080;
+    border-radius: 5px;
+    font-size: 1rem;
+    margin-bottom: 20px;
+}
+#back-to-top {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #ffcc00;
+    color: #004080;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: 0.3s;
+}
+
+#back-to-top:hover {
+    background: #e6b800;
+}
+
+
+#loader {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: #004080;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    transition: opacity 0.5s ease-out;
+}
+
+#loader:after {
+    content: "";
+    width: 40px;
+    height: 40px;
+    border: 5px solid white;
+    border-top: 5px solid transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
