@@ -41,3 +41,17 @@ function searchResources() {
         }
     });
 }
+// Visitor Counter using localStorage
+document.addEventListener("DOMContentLoaded", function () {
+    let visitCount = localStorage.getItem("visitCount");
+    if (!visitCount) {
+        visitCount = 1;
+    } else {
+        visitCount = parseInt(visitCount) + 1;
+    }
+    localStorage.setItem("visitCount", visitCount);
+    
+    // Display visit count on the page
+    document.getElementById("visitor-count").innerText = visitCount;
+});
+
