@@ -206,3 +206,46 @@ body {
     opacity: 0;
     visibility: hidden;
 }
+.resources-matlab {
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+}
+
+.card-matlab {
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 15px 20px;
+    max-width: 700px;
+    width: 100%;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    font-size: 14px;
+}
+
+.card-matlab ol {
+    padding-left: 20px;
+    margin: 0;
+}
+
+.card-matlab li {
+    margin-bottom: 10px;
+}
+
+.card-matlab a {
+    font-weight: bold;
+    color: #004080;
+    text-decoration: none;
+}
+
+.card-matlab a:hover {
+    text-decoration: underline;
+    color: #0066cc;
+}
+
+.card-matlab p {
+    margin: 4px 0 0 0;
+    color: #444;
+    line-height: 1.4;
+}
