@@ -3,21 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RFWave Resources</title>
+    <title>RFWave Resources - Modern RF & Microwave Hub</title> <!-- Updated Title -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts: Poppins and Roboto Condensed -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Roboto+Condensed:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
-     <link rel="icon" type="image/png" href="logo.png">
+    <link rel="icon" type="image/png" href="logo.png">
 </head>
 <body>
   <div id="loader"></div>
 
-    <div class="navbar">
-      <button id="dark-mode-toggle">
-        <i class="fa-solid fa-moon"></i>
+    <nav class="navbar"> <!-- Changed div to nav for semantic HTML -->
+      <!-- Dark mode toggle button removed for now as dark is default -->
+      <!-- <button id="dark-mode-toggle"><i class="fa-solid fa-moon"></i></button> -->
+      <div style="display: flex; align-items: center;"> <!-- Wrapper for logo and title -->
+        <img src="logo.png" alt="RFWave Resources Logo" height="50"> <!-- Slightly smaller logo -->
+        <span style="margin-left: 15px;">RFWave Resources</span> <!-- Added margin -->
+      </div>
+      <button id="dark-mode-toggle" title="Toggle Theme"> <!-- Kept button for future light mode, but icon needs to change based on theme -->
+        <i class="fa-solid fa-sun"></i> <!-- Assuming it starts dark, so icon to switch to light -->
       </button>
-      <img src="logo.png" alt="RFWave Resources Logo" height="60">
-      <span>RFWave Resources</span>
-    </div>
+    </nav>
 
     <div class="hero" id="hero">
         <div class="hero-content">
@@ -54,7 +62,11 @@
             </div>
         </div>
 
-        <input type="text" id="search-bar" placeholder="Search resources..." onkeyup="searchResources()">
+        <div id="filter-container" style="margin-bottom: 20px; text-align: center;">
+            <!-- Filter buttons will be dynamically added here by JS -->
+        </div>
+
+        <input type="text" id="search-bar" placeholder="Search resources by keyword..." onkeyup="filterAndSearchResources()">
 
         <h2>Online Study Resources</h2>
         <div class="resources">
@@ -75,15 +87,15 @@
                 <p>MIT IAP 2025 PCB Design Class!</p>
             </div>
                 <div class="card">
-                <a href="https://www.youtube.com/watch?v=il-PpAT5l5Q/" target="_blank"><i class="fa-solid fa-hard-hat"></i>Design and Optimization of Dielectric Metasurfaces</a>
+                <a href="https://www.youtube.com/watch?v=il-PpAT5l5Q/" target="_blank"><i class="fa-solid fa-layer-group"></i>Design and Optimization of Dielectric Metasurfaces</a>
                 <p> Understanding and optimization of metasurface by Microsoft</p>
             </div>
           <div class="card">
-                <a href="https://youtube.com/playlist?list=PLPQrZqhah1qFoVZyZB_QQ9iNSmiJyaHp7&si=rozkPxvvIgpUDQG0" target="_blank"><i class="fa-solid fa-hard-hat"></i>Basic Understanding of FMCW RADAR</a>
+                <a href="https://youtube.com/playlist?list=PLPQrZqhah1qFoVZyZB_QQ9iNSmiJyaHp7&si=rozkPxvvIgpUDQG0" target="_blank"><i class="fa-solid fa-bullseye"></i>Basic Understanding of FMCW RADAR</a>
                 <p> About Radar and Mainly Focus on FMCW Radar</p>
             </div>
             <div class="card">
-                <a href="https://www.youtube.com/watch?v=WwJKxvz7qbs&t=1s" target="_blank"><i class="fa-solid fa-hard-hat"></i>What is Mixer</a>
+                <a href="https://www.youtube.com/watch?v=WwJKxvz7qbs&t=1s" target="_blank"><i class="fa-solid fa-sitemap"></i>What is Mixer</a>
                 <p> Modern RF and Microwave Mixers Explained</p>
             </div>
         </div>
@@ -356,6 +368,26 @@
         <p>Powerful open-source alternative to MATLAB for numerical analysis.</p>
     </div>
 </div>
+
+<h2>Recent News and Developments</h2>
+<div class="resources news-items"> <!-- Added news-items class for potential specific styling -->
+    <div class="card">
+        <a href="#" target="_blank"><i class="fa-solid fa-newspaper"></i> Major Breakthrough in 6G Antenna Design Announced</a>
+        <p>Researchers at XYZ University have published a paper detailing a novel antenna technology expected to significantly enhance 6G communication speeds and reliability. (Placeholder)</p>
+        <small>Date: October 26, 2023</small> <!-- Optional date -->
+    </div>
+    <div class="card">
+        <a href="#" target="_blank"><i class="fa-solid fa-newspaper"></i> New GaN Amplifiers Reach Record Efficiency</a>
+        <p>Tech Corp Inc. today unveiled a new line of Gallium Nitride power amplifiers that boast record-breaking power efficiency for microwave applications. (Placeholder)</p>
+        <small>Date: October 24, 2023</small>
+    </div>
+    <div class="card">
+        <a href="#" target="_blank"><i class="fa-solid fa-newspaper"></i> Advancements in RF Metamaterials for Stealth Technology</a>
+        <p>A recent study showcases how new RF metamaterials are being developed to improve stealth capabilities in aerospace and defense. (Placeholder)</p>
+        <small>Date: October 20, 2023</small>
+    </div>
+</div>
+
 <h2>Contribute</h2>
         <p>If you have useful RF & Microwave resources, submit a pull request on <a href="https://github.com/Sanu0910/rf_microwave_resources" target="_blank">GitHub</a>.</p>
     </div>
