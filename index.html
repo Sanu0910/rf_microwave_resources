@@ -1,405 +1,1118 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RFWave Resources - Modern RF & Microwave Hub</title> <!-- Updated Title -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <!-- Google Fonts: Poppins and Roboto Condensed -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Roboto+Condensed:wght@700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
-    <link rel="icon" type="image/png" href="logo.png">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RFWave Resources · RF 101 by Sanu</title>
+<meta name="description" content="RF 101 by Sanu — A curated, community-driven resource hub for RF & Microwave Engineering students and professionals.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<link rel="icon" type="image/png" href="logo.png">
+<style>
+/* ═══════════════════════════════════════
+   TOKENS — DEEP SPACE PALETTE
+═══════════════════════════════════════ */
+:root{
+  --bg:#080812;
+  --bg2:#0d0d24;
+  --panel:#11112a;
+  --panel2:#15153a;
+  --border:#1e1e45;
+  --border2:#2a2a5a;
+  --violet:#6c63ff;
+  --violet2:#4f46e5;
+  --violet-glow:rgba(108,99,255,0.2);
+  --cyan:#00d4ff;
+  --cyan2:#00aad4;
+  --pink:#ff6b9d;
+  --pink2:#e0447a;
+  --ink:#eef0ff;
+  --ink2:#a8aed6;
+  --muted:#6b72a8;
+  --muted2:#454a7a;
+  --warn:#ff6b6b;
+  --r:12px;
+  --shadow:0 8px 40px rgba(0,0,0,0.65);
+  --transition:0.22s cubic-bezier(0.4,0,0.2,1);
+}
+[data-theme="light"]{
+  --bg:#f0f0ff;
+  --bg2:#e8e8fa;
+  --panel:#ffffff;
+  --panel2:#f5f5ff;
+  --border:#c8c8f0;
+  --border2:#a8a8e0;
+  --ink:#0a0a2e;
+  --ink2:#1a1a4a;
+  --muted:#4a4a8a;
+  --muted2:#7a7aaa;
+}
+
+/* ═══════════════════════════════════════
+   RESET & BASE
+═══════════════════════════════════════ */
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;font-size:16px;}
+body{
+  background:var(--bg);color:var(--ink);
+  font-family:'Inter',system-ui,sans-serif;
+  line-height:1.6;overflow-x:hidden;
+  transition:background var(--transition),color var(--transition);
+}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;transition-duration:.001ms!important;}}
+a{color:var(--violet);text-decoration:none;}
+a:hover{text-decoration:underline;}
+img{max-width:100%;}
+
+/* ═══════════════════════════════════════
+   CANVAS (PARTICLE / WAVE BG)
+═══════════════════════════════════════ */
+#bgCanvas{
+  position:fixed;top:0;left:0;width:100%;height:100%;
+  pointer-events:none;z-index:0;opacity:.3;
+}
+
+/* ═══════════════════════════════════════
+   LOADER
+═══════════════════════════════════════ */
+#loader{
+  position:fixed;inset:0;background:var(--bg);z-index:9999;
+  display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px;
+  transition:opacity 0.5s,visibility 0.5s;
+}
+#loader.done{opacity:0;visibility:hidden;}
+.loader-ring{
+  width:56px;height:56px;border-radius:50%;
+  border:3px solid var(--border);
+  border-top-color:var(--violet);border-right-color:var(--cyan);
+  animation:spin 1s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+.loader-text{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);letter-spacing:2px;}
+
+/* ═══════════════════════════════════════
+   NAVBAR
+═══════════════════════════════════════ */
+.navbar{
+  position:sticky;top:0;z-index:100;
+  background:rgba(8,8,18,.9);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 32px;height:68px;
+  transition:background var(--transition);
+}
+[data-theme="light"] .navbar{background:rgba(240,240,255,.92);}
+.navbar-brand{display:flex;align-items:center;gap:12px;}
+.nav-logo{
+  width:38px;height:38px;border-radius:9px;overflow:hidden;
+  background:linear-gradient(135deg,var(--violet),var(--cyan2));
+  display:flex;align-items:center;justify-content:center;
+  font-family:'JetBrains Mono',monospace;font-weight:700;font-size:14px;color:#080812;
+  flex-shrink:0;position:relative;
+}
+.nav-logo img{width:100%;height:100%;object-fit:cover;}
+.nav-logo .fallback{display:none;}
+.nav-logo:not(:has(img)) .fallback,
+.nav-logo img[onerror]{display:block;}
+.nav-title{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:17px;}
+.nav-title small{display:block;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--cyan);font-weight:500;letter-spacing:1.2px;text-transform:uppercase;}
+.navbar-right{display:flex;align-items:center;gap:12px;}
+.nav-links{display:flex;gap:24px;margin-right:8px;}
+.nav-links a{font-size:13px;color:var(--muted);transition:color var(--transition);font-weight:500;}
+.nav-links a:hover{color:var(--violet);text-decoration:none;}
+@media(max-width:720px){.nav-links{display:none;}}
+
+.btn-icon{
+  width:38px;height:38px;border-radius:9px;border:1px solid var(--border);
+  background:transparent;color:var(--muted);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;font-size:14px;
+  transition:all var(--transition);
+}
+.btn-icon:hover{border-color:var(--violet);color:var(--violet);background:var(--violet-glow);}
+.rf101-pill{
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  background:linear-gradient(135deg,rgba(108,99,255,.14),rgba(0,212,255,.1));
+  border:1px solid rgba(108,99,255,.35);color:var(--violet);
+  padding:5px 14px;border-radius:20px;letter-spacing:.8px;white-space:nowrap;
+  animation:pillPulse 3s ease-in-out infinite;
+}
+@keyframes pillPulse{0%,100%{box-shadow:0 0 0 0 rgba(108,99,255,0);}50%{box-shadow:0 0 18px rgba(108,99,255,.3);}}
+
+/* ═══════════════════════════════════════
+   HERO
+═══════════════════════════════════════ */
+.hero{
+  min-height:92vh;display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;z-index:1;
+  padding:80px 32px 60px;
+  background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(108,99,255,.08) 0%,transparent 70%);
+}
+.hero-inner{text-align:center;max-width:760px;position:relative;z-index:2;}
+.hero-eyebrow{
+  font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:2.5px;
+  text-transform:uppercase;color:var(--cyan);margin-bottom:22px;
+  display:inline-flex;align-items:center;gap:10px;
+  animation:fadeUp .6s ease both;
+}
+.live-dot{
+  width:7px;height:7px;background:var(--cyan);border-radius:50%;
+  animation:livePulse 1.6s ease-in-out infinite;flex-shrink:0;
+}
+@keyframes livePulse{0%,100%{box-shadow:0 0 0 0 rgba(0,212,255,.5);}60%{box-shadow:0 0 0 7px rgba(0,212,255,0);}}
+.hero h1{
+  font-family:'Space Grotesk',sans-serif;font-size:clamp(36px,6vw,62px);
+  font-weight:700;line-height:1.08;letter-spacing:-.5px;margin-bottom:22px;
+  animation:fadeUp .6s .08s ease both;
+}
+.hero h1 .accent{
+  color:var(--violet);
+  text-shadow:0 0 50px rgba(108,99,255,.4);
+  display:inline;
+}
+.hero h1 .accent2{color:var(--cyan);}
+.hero p{
+  font-size:17px;color:var(--ink2);max-width:520px;margin:0 auto 36px;
+  animation:fadeUp .6s .16s ease both;
+}
+.hero-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;animation:fadeUp .6s .24s ease both;}
+.btn-primary{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--violet);color:#fff;
+  padding:13px 28px;border-radius:10px;font-weight:700;font-size:14px;
+  transition:all var(--transition);border:none;cursor:pointer;
+  font-family:'Space Grotesk',sans-serif;letter-spacing:.3px;
+}
+.btn-primary:hover{background:var(--violet2);color:#fff;transform:translateY(-2px);box-shadow:0 8px 28px rgba(108,99,255,.4);text-decoration:none;}
+.btn-secondary{
+  display:inline-flex;align-items:center;gap:8px;
+  background:transparent;color:var(--ink);
+  padding:13px 28px;border-radius:10px;font-weight:600;font-size:14px;
+  border:1px solid var(--border2);transition:all var(--transition);cursor:pointer;
+  font-family:'Space Grotesk',sans-serif;
+}
+.btn-secondary:hover{border-color:var(--violet);color:var(--violet);transform:translateY(-2px);text-decoration:none;}
+
+/* hero stats */
+.hero-stats{
+  display:flex;gap:0;margin-top:60px;
+  background:var(--panel);border:1px solid var(--border);border-radius:var(--r);
+  overflow:hidden;animation:fadeUp .6s .32s ease both;
+}
+.hstat{flex:1;padding:18px 24px;text-align:center;border-right:1px solid var(--border);transition:background var(--transition);}
+.hstat:last-child{border-right:none;}
+.hstat:hover{background:var(--panel2);}
+.hstat b{display:block;font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;color:var(--cyan);margin-bottom:4px;}
+.hstat span{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.9px;font-family:'JetBrains Mono',monospace;}
+
+/* wave SVG underlay */
+.hero-wave{
+  position:absolute;bottom:0;left:0;right:0;pointer-events:none;z-index:1;
+}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:translateY(0);}}
+
+/* ═══════════════════════════════════════
+   SEARCH BAR
+═══════════════════════════════════════ */
+.search-wrap{
+  position:sticky;top:68px;z-index:50;
+  background:rgba(8,8,18,.92);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);padding:14px 32px;
+  transition:background var(--transition);
+}
+[data-theme="light"] .search-wrap{background:rgba(240,240,255,.95);}
+.search-inner{max-width:1180px;margin:0 auto;display:flex;gap:12px;align-items:center;}
+.search-box{
+  flex:1;display:flex;align-items:center;gap:10px;
+  background:var(--panel2);border:1px solid var(--border);border-radius:10px;
+  padding:10px 16px;transition:border-color var(--transition),box-shadow var(--transition);
+}
+.search-box:focus-within{border-color:var(--violet);box-shadow:0 0 0 3px rgba(108,99,255,.14);}
+.search-box i{color:var(--muted);font-size:13px;flex-shrink:0;}
+.search-box input{
+  background:none;border:none;color:var(--ink);font-size:14px;font-family:'Inter',sans-serif;
+  width:100%;outline:none;
+}
+.search-box input::placeholder{color:var(--muted2);}
+.search-count{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--muted);white-space:nowrap;}
+
+/* ═══════════════════════════════════════
+   MAIN LAYOUT
+═══════════════════════════════════════ */
+.main{max-width:1180px;margin:0 auto;padding:56px 32px 80px;position:relative;z-index:1;}
+
+/* section title */
+.section-head{
+  display:flex;align-items:center;gap:14px;margin-bottom:24px;margin-top:56px;
+  animation-fill-mode:both;
+}
+.section-head:first-child{margin-top:0;}
+.section-icon{
+  width:40px;height:40px;border-radius:10px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:17px;
+  background:linear-gradient(135deg,rgba(108,99,255,.15),rgba(0,212,255,.08));
+  border:1px solid var(--border2);color:var(--violet);
+}
+.section-head h2{
+  font-family:'Space Grotesk',sans-serif;font-size:19px;font-weight:700;letter-spacing:-.2px;
+  flex:1;
+}
+.section-head::after{content:'';flex:1;height:1px;background:var(--border);}
+
+/* ═══════════════════════════════════════
+   CARD GRID
+═══════════════════════════════════════ */
+.cards{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(270px,1fr));
+  gap:18px;
+}
+.card{
+  background:var(--panel);border:1px solid var(--border);border-radius:var(--r);
+  padding:20px 22px;position:relative;overflow:hidden;
+  transition:border-color var(--transition),transform var(--transition),box-shadow var(--transition);
+  cursor:default;
+}
+.card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--violet),var(--cyan));
+  transform:scaleX(0);transform-origin:left;
+  transition:transform var(--transition);
+}
+.card:hover{border-color:var(--border2);transform:translateY(-3px);box-shadow:var(--shadow);}
+.card:hover::before{transform:scaleX(1);}
+.card-icon{
+  width:36px;height:36px;border-radius:9px;margin-bottom:14px;
+  background:var(--panel2);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;color:var(--cyan);
+  transition:all var(--transition);
+}
+.card:hover .card-icon{background:rgba(108,99,255,.12);border-color:var(--violet2);color:var(--violet);}
+.card a{
+  font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:14.5px;
+  color:var(--ink);transition:color var(--transition);
+  display:block;margin-bottom:8px;
+}
+.card:hover a{color:var(--violet);}
+.card a:hover{text-decoration:none;}
+.card p{font-size:12.5px;color:var(--muted);line-height:1.5;}
+.card-tag{
+  display:inline-block;margin-top:10px;font-family:'JetBrains Mono',monospace;
+  font-size:10px;padding:3px 9px;border-radius:20px;letter-spacing:.5px;
+  background:rgba(108,99,255,.1);color:var(--violet);border:1px solid rgba(108,99,255,.2);
+}
+.card-tag.pdf{background:rgba(255,107,157,.08);color:var(--pink);border-color:rgba(255,107,157,.2);}
+.card-tag.book{background:rgba(0,212,255,.08);color:var(--cyan2);border-color:rgba(0,212,255,.2);}
+.card-tag.yt{background:rgba(224,50,50,.1);color:#e05050;border-color:rgba(224,50,50,.2);}
+.card-tag.tool{background:rgba(108,99,255,.1);color:var(--violet);border-color:rgba(108,99,255,.2);}
+
+/* hidden by search */
+.card.hidden{display:none;}
+
+/* ═══════════════════════════════════════
+   MATLAB / TOOLS SPECIAL LAYOUT
+═══════════════════════════════════════ */
+.list-panel{
+  background:var(--panel);border:1px solid var(--border);border-radius:var(--r);
+  padding:24px 28px;
+}
+.list-panel ol{list-style:none;counter-reset:item;display:flex;flex-direction:column;gap:14px;}
+.list-panel ol li{
+  counter-increment:item;display:flex;align-items:flex-start;gap:14px;
+  padding-bottom:14px;border-bottom:1px solid var(--border);
+  transition:background var(--transition);border-radius:8px;padding:12px;
+}
+.list-panel ol li:last-child{border-bottom:none;}
+.list-panel ol li:hover{background:var(--panel2);}
+.list-num{
+  width:28px;height:28px;border-radius:7px;flex-shrink:0;
+  background:linear-gradient(135deg,rgba(108,99,255,.15),rgba(0,212,255,.08));
+  border:1px solid var(--border2);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:var(--cyan);
+  content:counter(item);
+}
+.list-item-inner a{
+  font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:14px;
+  color:var(--ink);transition:color var(--transition);
+}
+.list-panel ol li:hover a{color:var(--violet);}
+.list-item-inner p{font-size:12px;color:var(--muted);margin-top:4px;}
+
+/* tools grid */
+.tools-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(230px,1fr));
+  gap:14px;
+}
+.tool-card{
+  background:var(--panel);border:1px solid var(--border);border-radius:10px;
+  padding:16px 18px;display:flex;align-items:flex-start;gap:12px;
+  transition:all var(--transition);
+}
+.tool-card:hover{border-color:rgba(100,180,255,.4);transform:translateY(-2px);box-shadow:0 6px 24px rgba(0,0,0,.4);}
+.tool-icon{
+  width:34px;height:34px;border-radius:8px;flex-shrink:0;
+  background:rgba(100,180,255,.1);border:1px solid rgba(100,180,255,.2);
+  display:flex;align-items:center;justify-content:center;font-size:14px;color:#7abfff;
+}
+.tool-card a{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:13.5px;color:var(--ink);display:block;margin-bottom:4px;}
+.tool-card:hover a{color:#7abfff;}
+.tool-card p{font-size:11.5px;color:var(--muted);line-height:1.45;}
+
+/* ═══════════════════════════════════════
+   CONTRIBUTE BANNER
+═══════════════════════════════════════ */
+.contribute{
+  margin-top:64px;
+  background:linear-gradient(135deg,rgba(108,99,255,.08),rgba(0,212,255,.05));
+  border:1px solid var(--border2);border-radius:16px;
+  padding:40px 44px;display:flex;align-items:center;justify-content:space-between;gap:28px;flex-wrap:wrap;
+}
+.contribute h3{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;margin-bottom:8px;}
+.contribute p{font-size:14px;color:var(--ink2);max-width:520px;}
+.contribute a.btn-primary{flex-shrink:0;}
+
+/* ═══════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════ */
+footer{
+  border-top:1px solid var(--border);padding:32px 0 48px;position:relative;z-index:1;
+}
+.footer-inner{max-width:1180px;margin:0 auto;padding:0 32px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;}
+.footer-left{font-size:13px;color:var(--muted2);}
+.footer-left a{color:var(--muted);}
+.footer-left a:hover{color:var(--violet);}
+.visitor-chip{
+  font-family:'JetBrains Mono',monospace;font-size:11.5px;
+  background:var(--panel);border:1px solid var(--border);
+  padding:6px 16px;border-radius:20px;color:var(--muted);
+  display:inline-flex;align-items:center;gap:7px;
+}
+.visitor-chip .vdot{width:6px;height:6px;background:var(--cyan);border-radius:50%;animation:livePulse 2s ease-in-out infinite;}
+
+/* ═══════════════════════════════════════
+   BACK TO TOP
+═══════════════════════════════════════ */
+#back-to-top{
+  position:fixed;bottom:28px;right:28px;z-index:200;
+  width:44px;height:44px;border-radius:12px;border:1px solid var(--border2);
+  background:var(--panel);color:var(--violet);cursor:pointer;font-size:16px;
+  display:flex;align-items:center;justify-content:center;
+  transition:all var(--transition);opacity:0;pointer-events:none;
+  box-shadow:var(--shadow);
+}
+#back-to-top.visible{opacity:1;pointer-events:all;}
+#back-to-top:hover{background:var(--violet);color:#fff;transform:translateY(-2px);}
+
+/* ═══════════════════════════════════════
+   SCROLL REVEAL
+═══════════════════════════════════════ */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .65s ease,transform .65s ease;}
+.reveal.vis{opacity:1;transform:none;}
+
+/* ═══════════════════════════════════════
+   TOOLTIP
+═══════════════════════════════════════ */
+[data-tip]{position:relative;cursor:help;}
+[data-tip]::after{
+  content:attr(data-tip);position:absolute;bottom:calc(100% + 7px);left:50%;transform:translateX(-50%);
+  background:#1a1a45;border:1px solid var(--violet2);color:var(--ink);
+  font-size:11px;font-family:'JetBrains Mono',monospace;padding:5px 12px;border-radius:7px;
+  white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .2s;z-index:300;
+}
+[data-tip]:hover::after{opacity:1;}
+
+/* ═══════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════ */
+@media(max-width:680px){
+  .navbar{padding:0 18px;}
+  .hero{padding:60px 18px 50px;}
+  .hero-stats{flex-direction:column;}
+  .hstat{border-right:none;border-bottom:1px solid var(--border);}
+  .hstat:last-child{border-bottom:none;}
+  .main{padding:40px 18px 60px;}
+  .contribute{padding:28px 24px;}
+  .search-wrap{padding:12px 18px;}
+}
+</style>
 </head>
 <body>
-  <div id="loader"></div>
 
-    <nav class="navbar"> <!-- Changed div to nav for semantic HTML -->
-      <!-- Dark mode toggle button removed for now as dark is default -->
-      <!-- <button id="dark-mode-toggle"><i class="fa-solid fa-moon"></i></button> -->
-      <div style="display: flex; align-items: center;"> <!-- Wrapper for logo and title -->
-        <img src="logo.png" alt="RFWave Resources Logo" height="50"> <!-- Slightly smaller logo -->
-        <span style="margin-left: 15px;">RFWave Resources</span> <!-- Added margin -->
-      </div>
-      <button id="dark-mode-toggle" title="Toggle Theme"> <!-- Kept button for future light mode, but icon needs to change based on theme -->
-        <i class="fa-solid fa-sun"></i> <!-- Assuming it starts dark, so icon to switch to light -->
-      </button>
+<!-- Particle / EM-field background canvas -->
+<canvas id="bgCanvas"></canvas>
+
+<!-- Loader -->
+<div id="loader">
+  <div class="loader-ring"></div>
+  <div class="loader-text">INITIALIZING RF 101 ·· STAND BY</div>
+</div>
+
+<!-- ═══ NAVBAR ═══ -->
+<nav class="navbar">
+  <div class="navbar-brand">
+    <div class="nav-logo">
+      <img src="logo.png" alt="RF 101" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <span class="fallback" style="display:none;width:100%;height:100%;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:13px;color:#080812;">RF</span>
+    </div>
+    <div class="nav-title">
+      RFWave Resources
+      <small>RF 101 · BY SANU</small>
+    </div>
+  </div>
+  <div class="navbar-right">
+    <nav class="nav-links">
+      <a href="#resources">Resources</a>
+      <a href="#matlab">MATLAB</a>
+      <a href="#tools">Tools</a>
+      <a href="https://github.com/Sanu0910/rf_microwave_resources" target="_blank">GitHub</a>
     </nav>
+    <div class="rf101-pill">⚡ RF 101 LIVE</div>
+    <button class="btn-icon" id="themeToggle" title="Toggle theme" aria-label="Toggle theme">
+      <i class="fa-solid fa-moon"></i>
+    </button>
+  </div>
+</nav>
 
-    <div class="hero" id="hero">
-        <div class="hero-content">
-            <h1>Welcome to RFWave Resources</h1>
-            <h2>Your one-stop destination for RF & Microwave study materials.</h2>
-            <a href="#resources" class="cta-button">Explore Resources</a>
-        </div>
+<!-- ═══ HERO ═══ -->
+<section class="hero" id="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow"><span class="live-dot"></span>RF &amp; Microwave Engineering · Community Resources</div>
+    <h1>Master the world<br>of <span class="accent">RF &amp; Microwave</span><br><span class="accent2">Engineering</span></h1>
+    <p>A curated, community-driven hub of books, videos, tools, and guides — built for RF engineers by an RF engineer.</p>
+    <div class="hero-btns">
+      <a href="#resources" class="btn-primary"><i class="fa-solid fa-bolt"></i> Explore Resources</a>
+      <a href="https://github.com/Sanu0910/rf_microwave_resources" target="_blank" class="btn-secondary"><i class="fa-brands fa-github"></i> Contribute on GitHub</a>
     </div>
-
-    <div class="container" id="resources">
-        <p class="description">A curated collection of valuable study resources for RF and Microwave Engineering.</p>
-
-        <h2>Basics of Electromagnetics & Motivation</h2>
-        <div class="resources">
-            <div class="card">
-                <a href="https://youtu.be/jCVv9K_krtU?si=CNOJFDwlZPAPeAdD" target="_blank"><i class="fa-solid fa-video"></i> Motivation for Electromagnetic Engineers</a>
-                <p>Inspirational video explaining the impact of electromagnetics.</p>
-            </div>
-            <div class="card">
-                <a href="https://www.maxwells-equations.com/" target="_blank"><i class="fa-solid fa-magnet"></i> Maxwell's Equations</a>
-                <p>Fundamentals of electromagnetic theory and Maxwell’s equations.</p>
-            </div>
-            <div class="card">
-                <a href="https://www.electronics-tutorials.ws/" target="_blank"><i class="fa-solid fa-bolt"></i> Electromagnetic Basics</a>
-                <p>Simple explanations of electromagnetic wave concepts.</p>
-            </div>
-            <div class="card">
-                <a href="https://www.youtube.com/watch?v=8GLpBE5n5Cw" target="_blank"><i class="fa-solid fa-broadcast-tower"></i> Intro to RF Power Amplifier</a>
-                <p>Simple explanations of RF Power Amplifier by Prof. Ali Hajimiri.</p>
-            </div>
-            <div class="card">
-                <a href="https://www.ted.com/talks" target="_blank"><i class="fa-solid fa-lightbulb"></i> TED Talks on Science & Engineering</a>
-                <p>Inspirational talks by experts in electromagnetics and science.</p>
-            </div>
-        </div>
-
-        <div id="filter-container" style="margin-bottom: 20px; text-align: center;">
-            <!-- Filter buttons will be dynamically added here by JS -->
-        </div>
-
-        <input type="text" id="search-bar" placeholder="Search resources by keyword..." onkeyup="filterAndSearchResources()">
-
-        <h2>Online Study Resources</h2>
-        <div class="resources">
-            <div class="card">
-                <a href="https://www.signalintegrityjournal.com/articles/3546-sij-university" target="_blank"><i class="fa-solid fa-graduation-cap"></i> SIJ University</a>
-                <p>Signal Integrity Journal's learning resources.</p>
-            </div>
-            <div class="card">
-                <a href="https://www.eecg.utoronto.ca/~ali/intuitions.html" target="_blank"><i class="fa-solid fa-brain"></i> Intuition for Analog Circuits</a>
-                <p>Conceptual Explanations of Analog Circuits by Prof. Ali Sheikholeslami</p>
-            </div>
-            <div class="card">
-                <a href="https://www.antenna-theory.com/" target="_blank"><i class="fa-solid fa-signal"></i> Antenna Theory</a>
-                <p>Comprehensive guide on antenna design and principles.</p>
-            </div>
-             <div class="card">
-                <a href="https://pcb.mit.edu/" target="_blank"><i class="fa-solid fa-screwdriver-wrench"></i>The Art and Science of PCB Design</a>
-                <p>MIT IAP 2025 PCB Design Class!</p>
-            </div>
-                <div class="card">
-                <a href="https://www.youtube.com/watch?v=il-PpAT5l5Q/" target="_blank"><i class="fa-solid fa-layer-group"></i>Design and Optimization of Dielectric Metasurfaces</a>
-                <p> Understanding and optimization of metasurface by Microsoft</p>
-            </div>
-          <div class="card">
-                <a href="https://youtube.com/playlist?list=PLPQrZqhah1qFoVZyZB_QQ9iNSmiJyaHp7&si=rozkPxvvIgpUDQG0" target="_blank"><i class="fa-solid fa-bullseye"></i>Basic Understanding of FMCW RADAR</a>
-                <p> About Radar and Mainly Focus on FMCW Radar</p>
-            </div>
-            <div class="card">
-                <a href="https://www.youtube.com/watch?v=WwJKxvz7qbs&t=1s" target="_blank"><i class="fa-solid fa-sitemap"></i>What is Mixer</a>
-                <p> Modern RF and Microwave Mixers Explained</p>
-            </div>
-        </div>
-
-        <h2>Downloadable PDFs</h2>
-        <div class="resources">
-            <div class="card">
-                <a href="pdfs/Mixer_Basic.pdf" target="_blank"><i class="fa-solid fa-file-pdf"></i> RF Mixer Basics</a>
-                <p>Brief understanding of RF Mixer.</p>
-            </div>
-            <div class="card">
-                <a href="pdfs/Impedance_Matching.pdf" target="_blank"><i class="fa-solid fa-file-pdf"></i> Impedance Matching Network Architectures</a>
-                <p>Basic concepts of Impedance Matching.</p>
-            </div>
-            <div class="card">
-                <a href="pdfs/PLL Fundamental.pdf" target="_blank"><i class="fa-solid fa-file-pdf"></i> Phase Lock Loop</a>
-                <p>Understanig the PLL.</p>
-            </div>
-            <div class="card">
-                <a href="pdfs/RF_FILTERS.pdf" target="_blank"><i class="fa-solid fa-file-pdf"></i> RF Filters Based on Design Methods</a>
-                <p>Comprehensive Overview of RF Filters Based on Design Methods</p>
-            </div>
-            <div class="card">
-                <a href="pdfs/Signal_integrity_PCB.pdf" target="_blank"><i class="fa-solid fa-file-pdf"></i> Understanding a Signal Integrity in a PCB</a>
-                <p>Comprehensive Overview of Signal Integrity in a PCB</p>
-            </div>
-        </div>
-        <h2>Recommended Books</h2>
-        <div class="resources">
-            <div class="card">
-                <a href="books/Pozar_Microwave Engineering(2012).pdf"><i class="fa-solid fa-book"></i> Microwave Engineering - David M. Pozar</a>
-                <p>A widely used textbook covering microwave circuit design and applications.</p>
-            </div>
-            <div class="card">
-                <a href="books/Antenna Theory Analysis and Design 3rd ed.pdf"><i class="fa-solid fa-book"></i> Antenna Theory - Constantine A. Balanis</a>
-                <p>Comprehensive guide on antenna theory, analysis, and design.</p>
-            </div>
-            <div class="card">
-                <a href="books/Gonzalez_G._Microwave_Transistor_Amplifiers.pdf"><i class="fa-solid fa-book"></i> Microwave Transistor Amplifier - Gonzalez</a>
-                <p>Comprehensive guide on Power Amplifier.</p>
-            </div>
-          <div class="card">
-                <a href="books/Introduction to Electromagnetic Compatibility - Clayton R. Paul.pdf"><i class="fa-solid fa-book"></i> Introduction to Electromagnetic Compatibility - Clayton R. Paul</a>
-                <p>Book on EMI and EMC.</p>
-            </div>
-          <div class="card">
-                <a href="books/RF Microelectronics (Razavi).pdf"><i class="fa-solid fa-book"></i> RF Microelectronics - Razavi</a>
-                <p>Best Book for RF IC and RF Circuits Design.</p>
-            </div>
-            
-            <div class="card">
-                <a href="books/Power_Amplifiers_S.C.Cripps.pdf"><i class="fa-solid fa-book"></i> Power Amplifier - S.C.Cripps</a>
-                <p>Best Book for Power Amplifier.</p>
-            </div>
-             <div class="card">
-                <a href="books/Bogatin, Eric - Signal and power integrity, simplified (2018, Prentice Hall).pdf"><i class="fa-solid fa-book"></i> Signal and power integrity - Eric Bogatin</a>
-                <p>Best Book for Signal Integrity.</p>
-            </div>
-             <div class="card">
-                <a href="books/LNA-ESD Co-Design P.Leroux M.Steyaert.pdf"><i class="fa-solid fa-book"></i> LNA-ESD Co-Design for Fully Integrated CMOS Wireless Receivers - P. Leroux, M. Steyaert</a>
-                <p>Exploring the co-design of Low Noise Amplifier (LNA) and ESD protection circuits for seamless integration in CMOS-based wireless receiver front-ends.</p>
-            </div>
-        </div>
-
-        <h2>Famous YouTube Channels for Understanding</h2>
-        <div class="resources">
-            <div class="card">
-                <a href="https://www.youtube.com/@empossible1577" target="_blank"><i class="fa-solid fa-tv"></i> EM Possible</a>
-                <p>CEM Lectures is now EMPossible! EMPossible offers a variety of videos on computation, electromagnetics, and related topics. </p>
-            </div>
-            <div class="card">
-                <a href="https://www.youtube.com/@electricalengineeringsolutions" target="_blank"><i class="fa-solid fa-tv"></i> Electrical Engineering Solutions</a>
-                <p>Comprehensive lessons covering electromagnetics and RF concepts.</p>
-            </div>
-             <div class="card">
-                <a href="https://www.youtube.com/@MarshallBrunerRF" target="_blank"><i class="fa-solid fa-tv"></i> Marshall Bruner</a>
-                <p>Radar And RF Animation-Best Channel for understanding RADAR.</p>
-            </div>
-          <div class="card">
-                <a href="https://www.youtube.com/@MarshallBrunerRF" target="_blank"><i class="fa-solid fa-tv"></i>w2aew</a>
-                <p>Best Channel for Understanding RF Devices and Their Measurement </p>
-            </div>
-            <div class="card">
-                <a href="https://www.youtube.com/@profhalimboutayeb" target="_blank"><i class="fa-solid fa-tv"></i>Prof. Halim Boutayeb</a>
-                <p>Best Channel for Understanding RF Devices and Their Measurement </p>
-            </div>
-        </div>
-         <h2>Cheat Sheets</h2>
-        <div class="resources">
-            <div class="card">
-                <a href="pdfs/RF_FILTERS.pdf" target="_blank"><i class="fa-solid fa-file-pdf"></i> RF Filters Based on Design Methods</a>
-                <p>Learn RF, microwave engineering, and CST Studio Suite simulations with Prof. Halim Boutayeb's clear and practical tutorials.</p>
-            </div>
-        </div>
-<h2>Self-Paced MATLAB Course</h2>
-<div class="resources-matlab">
-    <div class="card-matlab">
-        <ol>
-            <li>
-                <a href="https://matlabacademy.mathworks.com/details/matlab-onramp/gettingstarted?s_v1=58985" target="_blank">
-                    MATLAB Onramp: Get Started with MATLAB
-                </a>
-                <p>Beginner-friendly 4-hour course covering MATLAB basics and programming fundamentals.</p>
-            </li>
-            <li>
-                <a href="https://matlabacademy.mathworks.com/details/make-your-functions-user-friendly/otmlfuf?s_v1=58985" target="_blank">
-                    Make Your Functions User-Friendly
-                </a>
-                <p>Learn best practices for writing reusable and flexible MATLAB functions.</p>
-            </li>
-            <li>
-                <a href="https://matlabacademy.mathworks.com/details/tables/otmltab?s_v1=59070" target="_blank">
-                    Working with Tables
-                </a>
-                <p>Master handling, analyzing, and organizing tabular data using MATLAB.</p>
-            </li>
-            <li>
-                <a href="https://matlabacademy.mathworks.com/details/import-irregular-data/otmliid?s_v1=59070" target="_blank">
-                    Import Irregular Data
-                </a>
-                <p>Efficiently import and process non-standard and messy datasets.</p>
-            </li>
-            <li>
-                <a href="https://matlabacademy.mathworks.com/details/clean-and-prepare-data-for-analysis/otmlpda?s_v1=59070" target="_blank">
-                    Clean and Prepare Data for Analysis
-                </a>
-                <p>Preprocess and structure data for meaningful analysis.</p>
-            </li>
-            <li>
-                <a href="https://matlabacademy.mathworks.com/details/calculations-on-grouped-data/otmlcgd?s_v1=59070" target="_blank">
-                    Calculations on Grouped Data
-                </a>
-                <p>Perform group-wise operations and summarize results effectively.</p>
-            </li>
-            <li>
-                <a href="https://matlabacademy.mathworks.com/details/explore-data-with-matlab-plots/otmledp?s_v1=59266" target="_blank">
-                    Explore Data with MATLAB Plots
-                </a>
-                <p>Visualize and interpret data using various MATLAB plotting tools.</p>
-            </li>
-            <li>
-                <a href="https://matlabacademy.mathworks.com/details/how-matlab-graphics-work/otmlhgw?s_v1=59266" target="_blank">
-                    How MATLAB Graphics Work
-                </a>
-                <p>Understand the graphics system to customize plots and figures.</p>
-            </li>
-            <li>
-                <a href="https://matlabacademy.mathworks.com/details/calculations-with-vectors-and-matrices/otmlcvm?s_v1=59395" target="_blank">
-                    Calculations with Vectors and Matrices
-                </a>
-                <p>Boost efficiency using matrix and vector operations for data analysis.</p>
-            </li>
-            <li>
-                <a href="https://matlabacademy.mathworks.com/details/statistics-onramp/orst?s_v1=59395" target="_blank">
-                    Statistics Onramp
-                </a>
-                <p>Explore core statistics tools for analyzing and summarizing datasets.</p>
-            </li>
-            <li>
-                <a href="https://matlabacademy.mathworks.com/details/common-data-analysis-techniques/otmldat?s_v1=59395" target="_blank">
-                    Common Data Analysis Techniques
-                </a>
-                <p>Learn industry-relevant data analysis methods and strategies.</p>
-            </li>
-            <li>
-                <a href="https://matlabacademy.mathworks.com/details/curve-fitting-onramp/orcf?s_v1=59395" target="_blank">
-                    Curve Fitting Onramp
-                </a>
-                <p>Apply curve fitting techniques to model real-world data trends.</p>
-            </li>
-            <li>
-                <a href="https://matlabacademy.mathworks.com/details/introduction-to-linear-algebra-with-matlab/linalg?s_v1=59395" target="_blank">
-                    Introduction to Linear Algebra with MATLAB
-                </a>
-                <p>Understand matrix theory and applications in engineering using MATLAB.</p>
-            </li>
-            <li>
-                <a href="https://matlabacademy.mathworks.com/details/optimization-onramp/optim?s_v1=59395" target="_blank">
-                    Optimization Onramp
-                </a>
-                <p>Learn to solve optimization problems and tune system performance.</p>
-            </li>
-            <li>
-                <a href="https://app.go.mathworks.com/e/er?s_v1=59501&lid=40440" target="_blank">
-                    Improve MATLAB Code Performance (Part 1)
-                </a>
-                <p>Learn smart coding techniques to optimize runtime and memory use.</p>
-            </li>
-            <li>
-                <a href="https://app.go.mathworks.com/e/er?s_v1=59501&lid=38449" target="_blank">
-                    Improve MATLAB Code Performance (Part 2)
-                </a>
-                <p>Advanced practices for writing clean, efficient, and maintainable code.</p>
-            </li>
-            <li>
-                <a href="https://matlabacademy.mathworks.com/details/app-building-onramp/orab?s_v1=59501" target="_blank">
-                    App Building Onramp
-                </a>
-                <p>Design interactive apps in MATLAB using App Designer for automation and visualization.</p>
-            </li>
-        </ol>
+    <div class="hero-stats">
+      <div class="hstat" data-tip="External links & videos"><b>20+</b><span>Videos &amp; Links</span></div>
+      <div class="hstat" data-tip="Curated PDF references"><b>5+</b><span>PDFs</span></div>
+      <div class="hstat" data-tip="Recommended textbooks"><b>8</b><span>Books</span></div>
+      <div class="hstat" data-tip="Open-source simulation software"><b>14</b><span>Open-Source Tools</span></div>
+      <div class="hstat" data-tip="Self-paced MATLAB modules"><b>17</b><span>MATLAB Courses</span></div>
     </div>
+  </div>
+  <svg class="hero-wave" viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,60 C240,10 480,80 720,40 C960,0 1200,70 1440,30 L1440,80 L0,80 Z" fill="rgba(108,99,255,0.05)"/>
+    <path d="M0,70 C360,20 600,75 900,45 C1100,25 1300,65 1440,50 L1440,80 L0,80 Z" fill="rgba(0,212,255,0.03)"/>
+  </svg>
+</section>
+
+<!-- ═══ SEARCH ═══ -->
+<div class="search-wrap" id="searchWrap">
+  <div class="search-inner">
+    <div class="search-box">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="text" id="search-bar" placeholder="Search resources, books, tools…" autocomplete="off">
+    </div>
+    <span class="search-count" id="searchCount"></span>
+  </div>
 </div>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Open Source RF Tools</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script> <!-- For icons -->
-</head>
-<body>
 
-<h2>Open Source Tools for RF & EM Simulation</h2>
-<div class="resources-rf">
-    <div class="card-rf">
-        <a href="https://www.openems.de/" target="_blank"><i class="fa-solid fa-laptop-code"></i> OpenEMS</a>
-        <p>FDTP solver with support for differential equations. Supports MATLAB and Python scripting.</p>
+<!-- ═══ MAIN ═══ -->
+<main class="main" id="resources">
+
+  <!-- 1. BASICS & MOTIVATION -->
+  <div class="section-head reveal">
+    <div class="section-icon"><i class="fa-solid fa-rocket"></i></div>
+    <h2>Basics of Electromagnetics &amp; Motivation</h2>
+  </div>
+  <div class="cards reveal">
+    <div class="card">
+      <div class="card-icon"><i class="fa-solid fa-video"></i></div>
+      <a href="https://youtu.be/jCVv9K_krtU?si=CNOJFDwlZPAPeAdD" target="_blank">Motivation for EM Engineers</a>
+      <p>Inspirational video on the real-world impact of electromagnetics — great starting point.</p>
+      <span class="card-tag yt">YouTube</span>
     </div>
-    <div class="card-rf">
-        <a href="https://www.elmerfem.org" target="_blank"><i class="fa-solid fa-laptop-code"></i> Elmer FEM</a>
-        <p>Finite Element Solver with GUI for multiphysics simulations.</p>
+    <div class="card">
+      <div class="card-icon"><i class="fa-solid fa-magnet"></i></div>
+      <a href="https://www.maxwells-equations.com/" target="_blank">Maxwell's Equations</a>
+      <p>Deep-dive into the four equations that underpin all of RF and microwave engineering.</p>
+      <span class="card-tag">Web</span>
     </div>
-    <div class="card-rf">
-        <a href="https://lnkd.in/dY7hVyg5" target="_blank"><i class="fa-solid fa-laptop-code"></i> Scikit-RF</a>
-        <p>Python-based RF and microwave simulation toolkit.</p>
+    <div class="card">
+      <div class="card-icon"><i class="fa-solid fa-bolt"></i></div>
+      <a href="https://www.electronics-tutorials.ws/" target="_blank">Electromagnetic Basics</a>
+      <p>Clear, accessible explanations of EM wave concepts — ideal for beginners.</p>
+      <span class="card-tag">Web</span>
     </div>
-    <div class="card-rf">
-        <a href="https://lnkd.in/dzxEZZWp" target="_blank"><i class="fa-solid fa-laptop-code"></i> MEEP</a>
-        <p>FDTP solver with scripting support in Python, Scheme, or C++.</p>
+    <div class="card">
+      <div class="card-icon"><i class="fa-solid fa-broadcast-tower"></i></div>
+      <a href="https://www.youtube.com/watch?v=8GLpBE5n5Cw" target="_blank">Intro to RF Power Amplifier</a>
+      <p>Prof. Ali Hajimiri explains PA design fundamentals with exceptional clarity.</p>
+      <span class="card-tag yt">YouTube</span>
     </div>
-    <div class="card-rf">
-        <a href="https://www.scilab.org" target="_blank"><i class="fa-solid fa-laptop-code"></i> SciLab</a>
-        <p>Open-source software for numerical computation, an alternative to MATLAB.</p>
+    <div class="card">
+      <div class="card-icon"><i class="fa-solid fa-lightbulb"></i></div>
+      <a href="https://www.ted.com/talks" target="_blank">TED Talks: Science &amp; Engineering</a>
+      <p>Big-picture inspiration from leading voices in science, engineering and technology.</p>
+      <span class="card-tag">Web</span>
     </div>
-    <div class="card-rf">
-        <a href="https://freefem.org/" target="_blank"><i class="fa-solid fa-laptop-code"></i> FreeFEM</a>
-        <p>Finite Element Method (FEM) solver for complex multiphysics simulations.</p>
+  </div>
+
+  <!-- 2. ONLINE RESOURCES -->
+  <div class="section-head reveal">
+    <div class="section-icon"><i class="fa-solid fa-globe"></i></div>
+    <h2>Online Study Resources</h2>
+  </div>
+  <div class="cards reveal">
+    <div class="card">
+      <div class="card-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+      <a href="https://www.signalintegrityjournal.com/articles/3546-sij-university" target="_blank">SIJ University</a>
+      <p>Signal Integrity Journal's structured learning library for RF and SI engineers.</p>
+      <span class="card-tag">Web</span>
     </div>
-    <div class="card-rf">
-        <a href="https://www.nec2.org/" target="_blank"><i class="fa-solid fa-laptop-code"></i> NEC</a>
-        <p>Method of Moments (MoM) solver for antenna simulation on wire and surface structures.</p>
+    <div class="card">
+      <div class="card-icon"><i class="fa-solid fa-brain"></i></div>
+      <a href="https://www.eecg.utoronto.ca/~ali/intuitions.html" target="_blank">Intuition for Analog Circuits</a>
+      <p>Prof. Ali Sheikholeslami's conceptual explanations — builds genuine understanding, not just formulas.</p>
+      <span class="card-tag">Web</span>
     </div>
-    <div class="card-rf">
-        <a href="https://fenicsproject.org/" target="_blank"><i class="fa-solid fa-laptop-code"></i> FEniCS</a>
-        <p>FEM platform for solving partial differential equations in Python/C++.</p>
+    <div class="card">
+      <div class="card-icon"><i class="fa-solid fa-signal"></i></div>
+      <a href="https://www.antenna-theory.com/" target="_blank">Antenna Theory</a>
+      <p>Comprehensive guide on antenna design and principles — bookmark this.</p>
+      <span class="card-tag">Web</span>
     </div>
-    <div class="card-rf">
-        <a href="https://lnkd.in/dfRrwHQz" target="_blank"><i class="fa-solid fa-laptop-code"></i> Puma-EM</a>
+    <div class="card">
+      <div class="card-icon"><i class="fa-solid fa-screwdriver-wrench"></i></div>
+      <a href="https://pcb.mit.edu/" target="_blank">MIT PCB Design Class (IAP 2025)</a>
+      <p>The art and science of PCB design — from MIT's intensive engineering program.</p>
+      <span class="card-tag">Web</span>
+    </div>
+    <div class="card">
+      <div class="card-icon"><i class="fa-solid fa-layer-group"></i></div>
+      <a href="https://www.youtube.com/watch?v=il-PpAT5l5Q/" target="_blank">Design of Dielectric Metasurfaces</a>
+      <p>Microsoft Research talk on metasurface design and optimization.</p>
+      <span class="card-tag yt">YouTube</span>
+    </div>
+    <div class="card">
+      <div class="card-icon"><i class="fa-solid fa-satellite-dish"></i></div>
+      <a href="https://youtube.com/playlist?list=PLPQrZqhah1qFoVZyZB_QQ9iNSmiJyaHp7" target="_blank">FMCW RADAR — Full Playlist</a>
+      <p>Comprehensive playlist covering radar fundamentals with deep focus on FMCW systems.</p>
+      <span class="card-tag yt">YouTube</span>
+    </div>
+    <div class="card">
+      <div class="card-icon"><i class="fa-solid fa-arrows-split-up-and-left"></i></div>
+      <a href="https://www.youtube.com/watch?v=WwJKxvz7qbs&t=1s" target="_blank">What is a Mixer?</a>
+      <p>Modern RF and microwave mixers explained — from operation to practical design.</p>
+      <span class="card-tag yt">YouTube</span>
+    </div>
+  </div>
+
+  <!-- 3. PDFs -->
+  <div class="section-head reveal">
+    <div class="section-icon"><i class="fa-solid fa-file-pdf"></i></div>
+    <h2>Downloadable PDFs</h2>
+  </div>
+  <div class="cards reveal">
+    <div class="card">
+      <div class="card-icon"><i class="fa-solid fa-file-pdf"></i></div>
+      <a href="pdfs/Mixer_Basic.pdf" target="_blank">RF Mixer Basics</a>
+      <p>Concise overview of RF mixer operation, topologies and key specs.</p>
+      <span class="card-tag pdf">PDF</span>
+    </div>
+    <div class="card">
+      <div class="card-icon"><i class="fa-solid fa-file-pdf"></i></div>
+      <a href="pdfs/Impedance_Matching.pdf" target="_blank">Impedance Matching Network Architectures</a>
+      <p>Core concepts and topologies for impedance matching in RF circuits.</p>
+      <span class="card-tag pdf">PDF</span>
+    </div>
+    <div class="card">
+      <div class="card-icon"><i class="fa-solid fa-file-pdf"></i></div>
+      <a href="pdfs/PLL Fundamental.pdf" target="_blank">Phase-Locked Loop Fundamentals</a>
+      <p>From PLL theory to practical loop filter design — essential for RF system design.</p>
+      <span class="card-tag pdf">PDF</span>
+    </div>
+    <div class="card">
+      <div class="card-icon"><i class="fa-solid fa-file-pdf"></i></div>
+      <a href="pdfs/RF_FILTERS.pdf" target="_blank">RF Filters — Design Methods</a>
+      <p>Comprehensive overview of RF filter design: Butterworth, Chebyshev, elliptic, and more.</p>
+      <span class="card-tag pdf">PDF</span>
+    </div>
+    <div class="card">
+      <div class="card-icon"><i class="fa-solid fa-file-pdf"></i></div>
+      <a href="pdfs/Signal_integrity_PCB.pdf" target="_blank">Signal Integrity in PCB</a>
+      <p>Practical SI concepts for PCB design — reflection, crosstalk, power delivery.</p>
+      <span class="card-tag pdf">PDF</span>
+    </div>
+  </div>
+
+  <!-- 4. BOOKS -->
+  <div class="section-head reveal">
+    <div class="section-icon"><i class="fa-solid fa-book"></i></div>
+    <h2>Recommended Books</h2>
+  </div>
+  <div class="cards reveal">
+    <div class="card">
+      <div class="card-icon"><i class="fa-solid fa-book"></i></div>
+      <a href="books/Pozar_Microwave Engineering(2012).pdf">Microwave Engineering — Pozar</a>
+      <p>The gold standard textbook. Covers transmission lines, networks, amplifiers, and filters.</p>
+      <span class="card-tag book">Book</span>
+    </div>
+    <div class="card">
+      <div class="card-icon"><i class="fa-solid fa-book"></i></div>
+      <a href="books/Antenna Theory Analysis and Design 3rd ed.pdf">Antenna Theory — Balanis</a>
+      <p>The definitive reference for antenna theory, analysis, and design methods.</p>
+      <span class="card-tag book">Book</span>
+    </div>
+    <div class="card">
+      <div class="card-icon"><i class="fa-solid fa-book"></i></div>
+      <a href="books/Gonzalez_G._Microwave_Transistor_Amplifiers.pdf">Microwave Transistor Amplifiers — Gonzalez</a>
+      <p>Thorough coverage of transistor amplifier design at microwave frequencies.</p>
+      <span class="card-tag book">Book</span>
+    </div>
+    <div class="card">
+      <div class="card-icon"><i class="fa-solid fa-book"></i></div>
+      <a href="books/Introduction to Electromagnetic Compatibility - Clayton R. Paul.pdf">EMC — Clayton R. Paul</a>
+      <p>Comprehensive guide to EMI/EMC principles — from fundamentals to mitigation strategies.</p>
+      <span class="card-tag book">Book</span>
+    </div>
+    <div class="card">
+      <div class="card-icon"><i class="fa-solid fa-book"></i></div>
+      <a href="books/RF Microelectronics (Razavi).pdf">RF Microelectronics — Razavi</a>
+      <p>The essential text for RF IC and RF circuit design — Razavi's clarity is unmatched.</p>
+      <span class="card-tag book">Book</span>
+    </div>
+    <div class="card">
+      <div class="card-icon"><i class="fa-solid fa-book"></i></div>
+      <a href="books/Power_Amplifiers_S.C.Cripps.pdf">RF Power Amplifiers — Cripps</a>
+      <p>Industry-standard reference for PA design, load-pull, and efficiency optimization.</p>
+      <span class="card-tag book">Book</span>
+    </div>
+    <div class="card">
+      <div class="card-icon"><i class="fa-solid fa-book"></i></div>
+      <a href="books/Bogatin, Eric - Signal and power integrity, simplified (2018, Prentice Hall).pdf">Signal &amp; Power Integrity — Bogatin</a>
+      <p>Bogatin's accessible treatment of SI/PI — essential for every board-level RF designer.</p>
+      <span class="card-tag book">Book</span>
+    </div>
+    <div class="card">
+      <div class="card-icon"><i class="fa-solid fa-book"></i></div>
+      <a href="books/LNA-ESD Co-Design P.Leroux M.Steyaert.pdf">LNA-ESD Co-Design — Leroux &amp; Steyaert</a>
+      <p>Co-design of LNA and ESD protection for CMOS wireless receiver front-ends.</p>
+      <span class="card-tag book">Book</span>
+    </div>
+  </div>
+
+  <!-- 5. YOUTUBE CHANNELS -->
+  <div class="section-head reveal">
+    <div class="section-icon"><i class="fa-brands fa-youtube"></i></div>
+    <h2>YouTube Channels to Follow</h2>
+  </div>
+  <div class="cards reveal">
+    <div class="card">
+      <div class="card-icon"><i class="fa-solid fa-tv"></i></div>
+      <a href="https://www.youtube.com/@empossible1577" target="_blank">EMPossible</a>
+      <p>Computational EM lectures — rigorous, visual, and absolutely worth your time.</p>
+      <span class="card-tag yt">YouTube</span>
+    </div>
+    <div class="card">
+      <div class="card-icon"><i class="fa-solid fa-tv"></i></div>
+      <a href="https://www.youtube.com/@electricalengineeringsolutions" target="_blank">Electrical Engineering Solutions</a>
+      <p>Comprehensive lessons on electromagnetics and RF — great for students at all levels.</p>
+      <span class="card-tag yt">YouTube</span>
+    </div>
+    <div class="card">
+      <div class="card-icon"><i class="fa-solid fa-tv"></i></div>
+      <a href="https://www.youtube.com/@MarshallBrunerRF" target="_blank">Marshall Bruner — RF</a>
+      <p>RADAR &amp; RF animations — the best channel for building intuition on RADAR systems.</p>
+      <span class="card-tag yt">YouTube</span>
+    </div>
+    <div class="card">
+      <div class="card-icon"><i class="fa-solid fa-tv"></i></div>
+      <a href="https://www.youtube.com/@w2aew" target="_blank">w2aew</a>
+      <p>Hands-on RF device demonstrations and measurement techniques — practical gold.</p>
+      <span class="card-tag yt">YouTube</span>
+    </div>
+    <div class="card">
+      <div class="card-icon"><i class="fa-solid fa-tv"></i></div>
+      <a href="https://www.youtube.com/@profhalimboutayeb" target="_blank">Prof. Halim Boutayeb</a>
+      <p>Clear, practical tutorials on RF devices, CST Studio Suite, and antenna simulation.</p>
+      <span class="card-tag yt">YouTube</span>
+    </div>
+  </div>
+
+  <!-- 6. CHEAT SHEETS -->
+  <div class="section-head reveal">
+    <div class="section-icon"><i class="fa-solid fa-note-sticky"></i></div>
+    <h2>Cheat Sheets</h2>
+  </div>
+  <div class="cards reveal">
+    <div class="card">
+      <div class="card-icon"><i class="fa-solid fa-file-pdf"></i></div>
+      <a href="pdfs/RF_FILTERS.pdf" target="_blank">RF Filters — Quick Reference</a>
+      <p>Design method summary for RF filter topologies — print this and pin it to your desk.</p>
+      <span class="card-tag pdf">PDF</span>
+    </div>
+  </div>
+
+  <!-- 7. MATLAB -->
+  <div class="section-head reveal" id="matlab">
+    <div class="section-icon"><i class="fa-solid fa-terminal"></i></div>
+    <h2>Self-Paced MATLAB Course Path</h2>
+  </div>
+  <div class="list-panel reveal">
+    <ol>
+      <li>
+        <div class="list-num">01</div>
+        <div class="list-item-inner">
+          <a href="https://matlabacademy.mathworks.com/details/matlab-onramp/gettingstarted?s_v1=58985" target="_blank">MATLAB Onramp: Get Started with MATLAB</a>
+          <p>Beginner-friendly 4-hour course covering MATLAB basics and programming fundamentals.</p>
+        </div>
+      </li>
+      <li>
+        <div class="list-num">02</div>
+        <div class="list-item-inner">
+          <a href="https://matlabacademy.mathworks.com/details/make-your-functions-user-friendly/otmlfuf?s_v1=58985" target="_blank">Make Your Functions User-Friendly</a>
+          <p>Best practices for writing reusable, flexible MATLAB functions.</p>
+        </div>
+      </li>
+      <li>
+        <div class="list-num">03</div>
+        <div class="list-item-inner">
+          <a href="https://matlabacademy.mathworks.com/details/tables/otmltab?s_v1=59070" target="_blank">Working with Tables</a>
+          <p>Master handling, analyzing, and organizing tabular data in MATLAB.</p>
+        </div>
+      </li>
+      <li>
+        <div class="list-num">04</div>
+        <div class="list-item-inner">
+          <a href="https://matlabacademy.mathworks.com/details/import-irregular-data/otmliid?s_v1=59070" target="_blank">Import Irregular Data</a>
+          <p>Efficiently import and process non-standard and messy datasets.</p>
+        </div>
+      </li>
+      <li>
+        <div class="list-num">05</div>
+        <div class="list-item-inner">
+          <a href="https://matlabacademy.mathworks.com/details/clean-and-prepare-data-for-analysis/otmlpda?s_v1=59070" target="_blank">Clean and Prepare Data for Analysis</a>
+          <p>Preprocess and structure data for meaningful analysis in MATLAB.</p>
+        </div>
+      </li>
+      <li>
+        <div class="list-num">06</div>
+        <div class="list-item-inner">
+          <a href="https://matlabacademy.mathworks.com/details/calculations-on-grouped-data/otmlcgd?s_v1=59070" target="_blank">Calculations on Grouped Data</a>
+          <p>Group-wise operations and summarization — essential for signal processing workflows.</p>
+        </div>
+      </li>
+      <li>
+        <div class="list-num">07</div>
+        <div class="list-item-inner">
+          <a href="https://matlabacademy.mathworks.com/details/explore-data-with-matlab-plots/otmledp?s_v1=59266" target="_blank">Explore Data with MATLAB Plots</a>
+          <p>Visualize and interpret data using MATLAB's powerful plotting tools.</p>
+        </div>
+      </li>
+      <li>
+        <div class="list-num">08</div>
+        <div class="list-item-inner">
+          <a href="https://matlabacademy.mathworks.com/details/how-matlab-graphics-work/otmlhgw?s_v1=59266" target="_blank">How MATLAB Graphics Work</a>
+          <p>Understand the graphics system to fully customize plots and figures.</p>
+        </div>
+      </li>
+      <li>
+        <div class="list-num">09</div>
+        <div class="list-item-inner">
+          <a href="https://matlabacademy.mathworks.com/details/calculations-with-vectors-and-matrices/otmlcvm?s_v1=59395" target="_blank">Calculations with Vectors &amp; Matrices</a>
+          <p>Core vectorized operations — the backbone of efficient MATLAB code.</p>
+        </div>
+      </li>
+      <li>
+        <div class="list-num">10</div>
+        <div class="list-item-inner">
+          <a href="https://matlabacademy.mathworks.com/details/statistics-onramp/orst?s_v1=59395" target="_blank">Statistics Onramp</a>
+          <p>Core statistics tools for analyzing and summarizing engineering datasets.</p>
+        </div>
+      </li>
+      <li>
+        <div class="list-num">11</div>
+        <div class="list-item-inner">
+          <a href="https://matlabacademy.mathworks.com/details/common-data-analysis-techniques/otmldat?s_v1=59395" target="_blank">Common Data Analysis Techniques</a>
+          <p>Industry-relevant data analysis methods and real-world strategies.</p>
+        </div>
+      </li>
+      <li>
+        <div class="list-num">12</div>
+        <div class="list-item-inner">
+          <a href="https://matlabacademy.mathworks.com/details/curve-fitting-onramp/orcf?s_v1=59395" target="_blank">Curve Fitting Onramp</a>
+          <p>Apply curve fitting to model real-world data trends and system responses.</p>
+        </div>
+      </li>
+      <li>
+        <div class="list-num">13</div>
+        <div class="list-item-inner">
+          <a href="https://matlabacademy.mathworks.com/details/introduction-to-linear-algebra-with-matlab/linalg?s_v1=59395" target="_blank">Introduction to Linear Algebra with MATLAB</a>
+          <p>Matrix theory and engineering applications — critical for beamforming, MIMO, and signal processing.</p>
+        </div>
+      </li>
+      <li>
+        <div class="list-num">14</div>
+        <div class="list-item-inner">
+          <a href="https://matlabacademy.mathworks.com/details/optimization-onramp/optim?s_v1=59395" target="_blank">Optimization Onramp</a>
+          <p>Solve optimization problems and tune system performance in MATLAB.</p>
+        </div>
+      </li>
+      <li>
+        <div class="list-num">15</div>
+        <div class="list-item-inner">
+          <a href="https://app.go.mathworks.com/e/er?s_v1=59501&lid=40440" target="_blank">Improve MATLAB Code Performance (Part 1)</a>
+          <p>Smart coding techniques to optimize runtime and memory usage.</p>
+        </div>
+      </li>
+      <li>
+        <div class="list-num">16</div>
+        <div class="list-item-inner">
+          <a href="https://app.go.mathworks.com/e/er?s_v1=59501&lid=38449" target="_blank">Improve MATLAB Code Performance (Part 2)</a>
+          <p>Advanced practices for writing clean, efficient, and maintainable MATLAB code.</p>
+        </div>
+      </li>
+      <li>
+        <div class="list-num">17</div>
+        <div class="list-item-inner">
+          <a href="https://matlabacademy.mathworks.com/details/app-building-onramp/orab?s_v1=59501" target="_blank">App Building Onramp</a>
+          <p>Design interactive apps in MATLAB using App Designer for automation and visualization.</p>
+        </div>
+      </li>
+    </ol>
+  </div>
+
+  <!-- 8. OPEN SOURCE TOOLS -->
+  <div class="section-head reveal" id="tools">
+    <div class="section-icon"><i class="fa-solid fa-laptop-code"></i></div>
+    <h2>Open-Source RF &amp; EM Simulation Tools</h2>
+  </div>
+  <div class="tools-grid reveal">
+    <div class="tool-card">
+      <div class="tool-icon"><i class="fa-solid fa-laptop-code"></i></div>
+      <div>
+        <a href="https://www.openems.de/" target="_blank">OpenEMS</a>
+        <p>FDTD solver with MATLAB/Python scripting. Great for 3D EM simulation.</p>
+      </div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon"><i class="fa-solid fa-laptop-code"></i></div>
+      <div>
+        <a href="https://www.elmerfem.org" target="_blank">Elmer FEM</a>
+        <p>Multiphysics FEM solver with a GUI — handles coupled EM and thermal problems.</p>
+      </div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon"><i class="fa-solid fa-laptop-code"></i></div>
+      <div>
+        <a href="https://scikit-rf.org/" target="_blank">Scikit-RF</a>
+        <p>Python toolkit for RF/microwave engineering — S-parameter analysis, network design.</p>
+      </div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon"><i class="fa-solid fa-laptop-code"></i></div>
+      <div>
+        <a href="https://meep.readthedocs.io/" target="_blank">MEEP</a>
+        <p>FDTD solver in Python/Scheme/C++ — powerful for photonics and antenna simulation.</p>
+      </div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon"><i class="fa-solid fa-laptop-code"></i></div>
+      <div>
+        <a href="https://www.scilab.org" target="_blank">SciLab</a>
+        <p>Open-source MATLAB alternative for numerical computation and signal processing.</p>
+      </div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon"><i class="fa-solid fa-laptop-code"></i></div>
+      <div>
+        <a href="https://freefem.org/" target="_blank">FreeFEM</a>
+        <p>FEM solver for complex multiphysics PDEs — good for custom EM formulations.</p>
+      </div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon"><i class="fa-solid fa-laptop-code"></i></div>
+      <div>
+        <a href="https://www.nec2.org/" target="_blank">NEC</a>
+        <p>Method of Moments solver for wire and surface antenna simulation.</p>
+      </div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon"><i class="fa-solid fa-laptop-code"></i></div>
+      <div>
+        <a href="https://fenicsproject.org/" target="_blank">FEniCS</a>
+        <p>High-level FEM platform for PDE solving in Python/C++ — research-grade.</p>
+      </div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon"><i class="fa-solid fa-laptop-code"></i></div>
+      <div>
+        <a href="https://github.com/xj361685640/PUMA-EM" target="_blank">Puma-EM</a>
         <p>Surface MoM solver using Multilevel Fast Multipole Method (MLFMM).</p>
+      </div>
     </div>
-    <div class="card-rf">
-        <a href="https://traceon.org/" target="_blank"><i class="fa-solid fa-laptop-code"></i> Traceon</a>
+    <div class="tool-card">
+      <div class="tool-icon"><i class="fa-solid fa-laptop-code"></i></div>
+      <div>
+        <a href="https://traceon.org/" target="_blank">Traceon</a>
         <p>Electron optics simulator using BEM and particle tracing techniques.</p>
+      </div>
     </div>
-    <div class="card-rf">
-        <a href="https://qucsstudio.de/" target="_blank"><i class="fa-solid fa-laptop-code"></i> QUC Studio</a>
-        <p>2D circuit and EM simulator supporting various RF components.</p>
+    <div class="tool-card">
+      <div class="tool-icon"><i class="fa-solid fa-laptop-code"></i></div>
+      <div>
+        <a href="https://qucsstudio.de/" target="_blank">QucsStudio</a>
+        <p>2D circuit and EM simulator — fast for S-parameter and filter design.</p>
+      </div>
     </div>
-    <div class="card-rf">
-        <a href="https://lnkd.in/du_2GKM6" target="_blank"><i class="fa-solid fa-laptop-code"></i> PSSFSS</a>
-        <p>Tool for design and analysis of Frequency Selective Surfaces (FSS).</p>
+    <div class="tool-card">
+      <div class="tool-icon"><i class="fa-solid fa-laptop-code"></i></div>
+      <div>
+        <a href="https://github.com/simonp0420/PSSFSS.jl" target="_blank">PSSFSS</a>
+        <p>Design and analysis tool for Frequency Selective Surfaces (FSS) — Julia-based.</p>
+      </div>
     </div>
-    <div class="card-rf">
-        <a href="https://www.kicad.org" target="_blank"><i class="fa-solid fa-laptop-code"></i> KiCAD</a>
-        <p>PCB design suite with built-in SPICE simulator for circuit analysis.</p>
+    <div class="tool-card">
+      <div class="tool-icon"><i class="fa-solid fa-laptop-code"></i></div>
+      <div>
+        <a href="https://www.kicad.org" target="_blank">KiCAD</a>
+        <p>Professional PCB design suite with built-in SPICE simulation.</p>
+      </div>
     </div>
-    <div class="card-rf">
-        <a href="https://octave.org/" target="_blank"><i class="fa-solid fa-laptop-code"></i> Octave</a>
-        <p>Powerful open-source alternative to MATLAB for numerical analysis.</p>
+    <div class="tool-card">
+      <div class="tool-icon"><i class="fa-solid fa-laptop-code"></i></div>
+      <div>
+        <a href="https://octave.org/" target="_blank">GNU Octave</a>
+        <p>Powerful open-source MATLAB alternative — runs most MATLAB code without changes.</p>
+      </div>
     </div>
-</div>
+  </div>
 
-<h2>Recent News and Developments</h2>
-<div class="resources news-items"> <!-- Added news-items class for potential specific styling -->
-    <div class="card">
-        <a href="#" target="_blank"><i class="fa-solid fa-newspaper"></i> Major Breakthrough in 6G Antenna Design Announced</a>
-        <p>Researchers at XYZ University have published a paper detailing a novel antenna technology expected to significantly enhance 6G communication speeds and reliability. (Placeholder)</p>
-        <small>Date: October 26, 2023</small> <!-- Optional date -->
+  <!-- CONTRIBUTE -->
+  <div class="contribute reveal">
+    <div>
+      <h3>🤝 Contribute to RFWave Resources</h3>
+      <p>Found a great paper, tool, or tutorial that belongs here? Submit a pull request or open an issue on GitHub. This is a community resource — your contributions help every RF student.</p>
     </div>
-    <div class="card">
-        <a href="#" target="_blank"><i class="fa-solid fa-newspaper"></i> New GaN Amplifiers Reach Record Efficiency</a>
-        <p>Tech Corp Inc. today unveiled a new line of Gallium Nitride power amplifiers that boast record-breaking power efficiency for microwave applications. (Placeholder)</p>
-        <small>Date: October 24, 2023</small>
+    <a href="https://github.com/Sanu0910/rf_microwave_resources" target="_blank" class="btn-primary">
+      <i class="fa-brands fa-github"></i> Open on GitHub
+    </a>
+  </div>
+
+</main>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-left">
+      © 2025 RFWave Resources · Maintained by <a href="https://github.com/Sanu0910" target="_blank">Sanu Roy</a> ·
+      M.Tech in RF &amp; Microwave Engineering, IIT Kharagpur · 3+ Years RF Design &amp; Simulation Experience
     </div>
-    <div class="card">
-        <a href="#" target="_blank"><i class="fa-solid fa-newspaper"></i> Advancements in RF Metamaterials for Stealth Technology</a>
-        <p>A recent study showcases how new RF metamaterials are being developed to improve stealth capabilities in aerospace and defense. (Placeholder)</p>
-        <small>Date: October 20, 2023</small>
+    <div class="visitor-chip">
+      <span class="vdot"></span>
+      Visitors: <span id="visitor-count">—</span>
     </div>
-</div>
+  </div>
+</footer>
 
-<h2>Contribute</h2>
-        <p>If you have useful RF & Microwave resources, submit a pull request on <a href="https://github.com/Sanu0910/rf_microwave_resources" target="_blank">GitHub</a>.</p>
-    </div>
+<button id="back-to-top" aria-label="Back to top"><i class="fa-solid fa-arrow-up"></i></button>
 
-    <div class="footer">
-        <p>Visitors: <span id="visitor-count">0</span></p>
-        © 2025 RFWave Resources | Maintained by <a href="https://github.com/Sanu0910" target="_blank">Sanu Roy</a>
-    </div>
+<!-- ═══════════════════════════════════════
+   SCRIPTS
+═══════════════════════════════════════ -->
+<script>
+/* ── LOADER ── */
+window.addEventListener('load',()=>{
+  setTimeout(()=>document.getElementById('loader').classList.add('done'),700);
+});
 
-    <button onclick="topFunction()" id="back-to-top"><i class="fa-solid fa-arrow-up"></i></button>
+/* ── PARTICLE CANVAS ── */
+(function(){
+  const canvas=document.getElementById('bgCanvas');
+  const ctx=canvas.getContext('2d');
+  let W,H;
+  const resize=()=>{W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;};
+  resize();window.addEventListener('resize',resize);
+  const N=60;
+  const pts=Array.from({length:N},()=>({
+    x:Math.random()*window.innerWidth,y:Math.random()*window.innerHeight,
+    vx:(Math.random()-.5)*.22,vy:(Math.random()-.5)*.22,
+    r:Math.random()*1.4+.4,
+    col:Math.random()<.55?'108,99,255':Math.random()<.6?'0,212,255':'255,107,157'
+  }));
+  // mouse repel
+  let mx=-9999,my=-9999;
+  window.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    pts.forEach(p=>{
+      // mouse repel
+      const dx=p.x-mx,dy=p.y-my,d=Math.sqrt(dx*dx+dy*dy);
+      if(d<80){const f=(80-d)/80*.4;p.vx+=dx/d*f;p.vy+=dy/d*f;}
+      p.vx*=.995;p.vy*=.995;
+      p.x+=p.vx;p.y+=p.vy;
+      if(p.x<0)p.x=W;if(p.x>W)p.x=0;
+      if(p.y<0)p.y=H;if(p.y>H)p.y=0;
+      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(${p.col},.75)`;ctx.fill();
+    });
+    for(let i=0;i<N;i++){
+      for(let j=i+1;j<N;j++){
+        const dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.sqrt(dx*dx+dy*dy);
+        if(d<140){ctx.beginPath();ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);
+          ctx.strokeStyle=`rgba(108,99,255,${.15*(1-d/140)})`;ctx.lineWidth=.7;ctx.stroke();}
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
 
-    <script src="script.js"></script>
+/* ── THEME TOGGLE ── */
+const themeBtn=document.getElementById('themeToggle');
+let dark=true;
+themeBtn.addEventListener('click',()=>{
+  dark=!dark;
+  document.documentElement.setAttribute('data-theme',dark?'':'light');
+  themeBtn.querySelector('i').className=dark?'fa-solid fa-moon':'fa-solid fa-sun';
+});
 
+/* ── SCROLL REVEAL ── */
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');});
+},{threshold:.07});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+/* ── BACK TO TOP ── */
+const btt=document.getElementById('back-to-top');
+window.addEventListener('scroll',()=>{btt.classList.toggle('visible',window.scrollY>400);});
+btt.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+
+/* ── SEARCH ── */
+const searchInput=document.getElementById('search-bar');
+const countEl=document.getElementById('searchCount');
+function searchResources(){
+  const q=searchInput.value.toLowerCase().trim();
+  const allCards=document.querySelectorAll('.card,.tool-card');
+  let visible=0,total=allCards.length;
+  allCards.forEach(card=>{
+    const text=card.textContent.toLowerCase();
+    const match=!q||text.includes(q);
+    card.classList.toggle('hidden',!match);
+    if(match)visible++;
+  });
+  // also filter MATLAB list items
+  document.querySelectorAll('.list-panel li').forEach(li=>{
+    const match=!q||li.textContent.toLowerCase().includes(q);
+    li.style.display=match?'':'none';
+  });
+  countEl.textContent=q?`${visible} result${visible!==1?'s':''}  found`:'';
+}
+searchInput.addEventListener('input',searchResources);
+
+/* ── VISITOR COUNT ── */
+(function(){
+  let count=parseInt(localStorage.getItem('rfwave_visits')||'0')+1;
+  localStorage.setItem('rfwave_visits',count);
+  document.getElementById('visitor-count').textContent=count.toLocaleString();
+})();
+</script>
 </body>
 </html>
