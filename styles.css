@@ -1,129 +1,342 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Roboto+Condensed:wght@700&display=swap');
+
+:root {
+    --primary-color: #0D1B2A; /* Dark Blue */
+    --secondary-color: #1B263B; /* Slightly Lighter Dark Blue */
+    --accent-color: #4F8A8B;  /* Teal Accent */
+    --text-color: #E0E1DD;   /* Light Gray/Off-white */
+    --card-bg-color: #1B263B; /* Dark card background */
+    --card-shadow-color: rgba(0, 0, 0, 0.4);
+    --link-color: #6ABEA7; /* Lighter Teal for links */
+    --font-primary: 'Poppins', sans-serif;
+    --font-headings: 'Roboto Condensed', sans-serif;
+}
+
 body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f8f9fa;
+    font-family: var(--font-primary);
+    background-color: var(--primary-color);
     margin: 0;
     padding: 0;
-    color: #333;
+    color: var(--text-color);
+    line-height: 1.6;
 }
 
 .navbar {
-    background-color: #004080;
-    padding: 15px;
+    background-color: var(--secondary-color);
+    padding: 15px 30px; /* Added more padding */
     text-align: center;
-    color: white;
-    font-size: 1.5rem;
+    color: var(--text-color);
+    font-size: 1.8rem; /* Slightly increased */
     font-weight: bold;
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 15px;
+    justify-content: space-between; /* Align items to space between */
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    position: sticky; /* Make navbar sticky */
+    top: 0;
+    z-index: 1000;
+}
+
+.navbar span {
+    font-family: var(--font-headings);
 }
 
 .container {
-    max-width: 1000px;
+    max-width: 1100px; /* Increased max-width */
     margin: 40px auto;
-    background: white;
+    background: var(--primary-color); /* Match body background or slightly different */
     padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 12px; /* Slightly more rounded */
+    /* box-shadow: 0 6px 12px var(--card-shadow-color); Removed outer shadow for container */
     text-align: center;
 }
 
-h1 {
-    color: #004080;
-    margin-bottom: 10px;
+h1, h2 { /* Apply to h2 as well */
+    font-family: var(--font-headings);
+    color: var(--accent-color);
+    margin-bottom: 20px; /* Increased margin */
+    text-transform: uppercase; /* Uppercase for a modern feel */
+    letter-spacing: 1px; /* Add letter spacing */
 }
 
+h1 {
+    font-size: 2.8rem; /* Larger h1 */
+}
+
+h2 {
+    font-size: 2rem; /* Larger h2 */
+    margin-top: 40px; /* More space above h2 */
+}
+
+
 .description {
-    font-size: 1.1rem;
-    margin-bottom: 20px;
+    font-size: 1.2rem; /* Slightly larger */
+    margin-bottom: 30px; /* Increased margin */
+    color: var(--text-color);
+    opacity: 0.9;
 }
 
 .resources {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid; /* Use grid for more control */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive grid */
+    gap: 25px; /* Increased gap */
     justify-content: center;
 }
 
 .card {
-    background: #f4f4f4;
-    padding: 20px;
-    margin: 10px;
-    width: 300px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s;
+    background: var(--card-bg-color);
+    padding: 25px; /* Increased padding */
+    margin: 0; /* Removed margin as gap is handled by grid */
+    border-radius: 10px; /* More rounded */
+    box-shadow: 0 5px 15px var(--card-shadow-color);
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smoother transition */
+    display: flex; /* Use flexbox for card content alignment */
+    flex-direction: column; /* Stack content vertically */
+    justify-content: space-between; /* Distribute space */
 }
 
 .card:hover {
-    transform: scale(1.05);
+    transform: translateY(-5px) scale(1.02); /* More subtle hover */
+    box-shadow: 0 8px 20px var(--card-shadow-color);
 }
 
 .card a {
     text-decoration: none;
-    font-weight: bold;
-    color: #0073e6;
-    font-size: 1.1rem;
+    font-weight: 600; /* Poppins bold */
+    color: var(--link-color);
+    font-size: 1.2rem; /* Slightly larger link text */
+    transition: color 0.3s ease;
+}
+
+.card a:hover {
+    color: var(--accent-color);
 }
 
 .card p {
-    font-size: 0.9rem;
-    color: #555;
+    font-size: 0.95rem; /* Slightly larger paragraph text */
+    color: var(--text-color);
+    opacity: 0.85; /* Slightly less prominent */
+    margin-top: 10px; /* Add some space above paragraph */
+    flex-grow: 1; /* Allow paragraph to take available space */
 }
 
+.card i { /* Style icons within cards */
+    margin-right: 8px;
+    color: var(--accent-color);
+}
+
+/* Light Mode Styles */
+.light-mode {
+    --primary-color: #F0F2F5; /* Light Gray */
+    --secondary-color: #FFFFFF; /* White */
+    --accent-color: #005A9C;  /* Professional Blue */
+    --text-color: #333333;   /* Dark Gray */
+    --card-bg-color: #FFFFFF; /* White card background */
+    --card-shadow-color: rgba(0, 0, 0, 0.1);
+    --link-color: #007BFF; /* Standard Blue Link */
+}
+
+/* Specific overrides for light mode if needed, most will be handled by variable changes */
+.light-mode .navbar {
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.light-mode .hero {
+    background: linear-gradient(rgba(220, 220, 220, 0.7), rgba(200, 200, 200, 0.8)), url('background.jpg') center/cover no-repeat fixed;
+    /* Text shadow might need adjustment for light background */
+}
+
+.light-mode .hero-content h1, .light-mode .hero-content p {
+    color: #2c3e50; /* Darker text for hero on light background */
+    text-shadow: 1px 1px 3px rgba(255,255,255,0.5);
+}
+
+
+.light-mode .cta-button {
+    background: var(--accent-color); /* Professional Blue */
+    color: #FFFFFF; /* White text */
+}
+
+.light-mode .cta-button:hover {
+    background: #00487C; /* Darker Professional Blue */
+    color: #FFFFFF;
+}
+
+.light-mode #dark-mode-toggle { /* Toggle button in light mode */
+    border: 1px solid var(--accent-color);
+    color: var(--accent-color);
+}
+
+.light-mode #dark-mode-toggle:hover {
+    background-color: var(--accent-color);
+    color: var(--primary-color); /* Text color of light mode background */
+}
+
+.light-mode #search-bar {
+    border: 2px solid #DDDDDD;
+    background-color: #FFFFFF;
+    color: var(--text-color);
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.light-mode #search-bar::placeholder {
+    color: #777777;
+}
+
+.light-mode #search-bar:focus {
+    border-color: var(--accent-color);
+     box-shadow: inset 0 1px 3px rgba(0,0,0,0.1), 0 0 0 3px rgba(0, 90, 156, 0.3);
+}
+
+.light-mode #back-to-top {
+    background: var(--accent-color);
+    color: #FFFFFF;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.light-mode #back-to-top:hover {
+    background: #00487C;
+}
+
+.light-mode #loader {
+    background: var(--primary-color);
+}
+
+.light-mode #loader:after {
+    border: 6px solid var(--text-color);
+    border-top: 6px solid var(--accent-color);
+}
+
+/* Filter Button Styles */
+.filter-button {
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    border: 1px solid var(--accent-color);
+    padding: 10px 20px;
+    margin: 5px;
+    border-radius: 20px; /* Pill shape */
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.filter-button:hover {
+    background-color: var(--accent-color);
+    color: var(--primary-color);
+    transform: translateY(-2px);
+}
+
+.filter-button.active {
+    background-color: var(--accent-color);
+    color: var(--primary-color);
+    font-weight: 700;
+    box-shadow: 0 0 10px rgba(var(--accent-color), 0.5);
+}
+
+.light-mode .filter-button {
+    background-color: var(--secondary-color); /* Usually white in light mode */
+    color: var(--text-color); /* Usually dark grey in light mode */
+    border: 1px solid var(--accent-color); /* Professional blue border */
+}
+
+.light-mode .filter-button:hover {
+    background-color: var(--accent-color); /* Professional blue */
+    color: #FFFFFF; /* White text */
+}
+
+.light-mode .filter-button.active {
+    background-color: var(--accent-color); /* Professional blue */
+    color: #FFFFFF; /* White text */
+    box-shadow: 0 0 10px rgba(var(--accent-color), 0.3);
+}
+
+/* Styling for date in news cards */
+.card small {
+    display: block;
+    margin-top: 10px;
+    font-size: 0.8rem;
+    color: var(--text-color);
+    opacity: 0.7;
+}
+
+.light-mode .card small {
+    color: var(--text-color); /* Should inherit correctly, but can be explicit */
+    opacity: 0.6;
+}
+
+
 .footer {
-    background: #004080;
-    color: white;
+    background: var(--secondary-color);
+    color: var(--text-color);
     text-align: center;
-    padding: 10px;
-    margin-top: 30px;
+    padding: 20px; /* Increased padding */
+    margin-top: 50px; /* Increased margin */
+    font-size: 0.9rem;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.3);
 }
 
 .footer a {
-    color: #ffcc00;
+    color: var(--accent-color);
     text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
 }
+
+.footer a:hover {
+    color: var(--link-color);
+}
+
 .hero {
-    background: url('background.jpg') center/cover no-repeat;
-    height: 300px;
+    background: linear-gradient(rgba(13, 27, 42, 0.8), rgba(13, 27, 42, 0.9)), url('background.jpg') center/cover no-repeat fixed; /* Darker overlay and fixed background */
+    min-height: 400px; /* Increased height */
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
-    color: white;
-    font-size: 1.5rem;
-    font-weight: bold;
+    color: var(--text-color);
     flex-direction: column;
+    padding: 20px; /* Add padding for smaller screens */
 }
 
 .hero-content h1 {
-    font-size: 2.5rem;
+    font-size: 3.5rem; /* Larger hero title */
+    color: var(--text-color); /* White title on hero */
+    margin-bottom: 15px;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.7); /* Text shadow for readability */
 }
 
 .hero-content p {
-    font-size: 1.2rem;
-    margin-bottom: 15px;
+    font-size: 1.4rem; /* Larger hero subtitle */
+    margin-bottom: 25px; /* Increased margin */
+    color: var(--text-color);
+    opacity: 0.9;
+    max-width: 600px; /* Limit width of subtitle */
 }
 
 .cta-button {
-    background: #ffcc00;
-    color: #004080;
-    padding: 12px 25px;
-    border-radius: 5px;
+    background: var(--accent-color);
+    color: var(--primary-color); /* Dark text on light button */
+    padding: 15px 35px; /* Larger button */
+    border-radius: 30px; /* Pill shape */
     text-decoration: none;
-    font-weight: bold;
-    transition: 0.3s;
+    font-weight: 700; /* Bolder */
+    font-size: 1.1rem;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .cta-button:hover {
-    background: #e6b800;
-}
-:root {
-    --bg-color: #f8f9fa;
-    --text-color: #333;
-    --card-bg: #f4f4f4;
+    background: var(--link-color);
+    color: var(--primary-color);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.4);
 }
 
+/* Remove the old dark-mode class as we are default dark now */
+/*
 .dark-mode {
     --bg-color: #1a1a1a;
     --text-color: #f8f9fa;
@@ -138,40 +351,69 @@ body {
 .card {
     background: var(--card-bg);
 }
+*/
 
-#dark-mode-toggle {
+#dark-mode-toggle { /* Style for potential future light mode toggle */
     background: transparent;
-    border: none;
-    color: white;
-    font-size: 1.5rem;
+    border: 1px solid var(--accent-color); /* Give it a border */
+    color: var(--accent-color);
+    font-size: 1.3rem; /* Adjusted size */
     cursor: pointer;
-    margin-left: 15px;
+    padding: 8px 10px; /* Add padding */
+    border-radius: 50%; /* Make it circular */
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
+
+#dark-mode-toggle:hover {
+    background-color: var(--accent-color);
+    color: var(--primary-color);
+}
+
 #search-bar {
-    width: 80%;
-    padding: 10px;
-    border: 2px solid #004080;
-    border-radius: 5px;
+    width: 70%; /* Adjusted width */
+    padding: 15px; /* Increased padding */
+    border: 2px solid var(--secondary-color);
+    background-color: var(--secondary-color); /* Match navbar/footer */
+    color: var(--text-color);
+    border-radius: 30px; /* Pill shape */
     font-size: 1rem;
-    margin-bottom: 20px;
+    margin-bottom: 30px; /* Increased margin */
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
+
+#search-bar::placeholder {
+    color: var(--text-color);
+    opacity: 0.7;
+}
+
+#search-bar:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.2), 0 0 0 3px var(--accent-color-translucent, rgba(79, 138, 139, 0.5)); /* Add focus ring */
+}
+
+
 #back-to-top {
     display: none;
     position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background: #ffcc00;
-    color: #004080;
+    bottom: 30px; /* Increased distance from bottom */
+    right: 30px; /* Increased distance from right */
+    background: var(--accent-color);
+    color: var(--primary-color);
     border: none;
-    padding: 10px 15px;
-    border-radius: 50%;
+    padding: 12px 18px; /* Adjusted padding */
+    border-radius: 50%; /* Circular */
     cursor: pointer;
-    font-size: 1.2rem;
-    transition: 0.3s;
+    font-size: 1.3rem; /* Adjusted size */
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    z-index: 1001; /* Ensure it's above navbar if navbar is also sticky */
 }
 
 #back-to-top:hover {
-    background: #e6b800;
+    background: var(--link-color);
+    transform: scale(1.1);
 }
 
 
@@ -179,22 +421,22 @@ body {
     position: fixed;
     width: 100%;
     height: 100%;
-    background: #004080;
+    background: var(--primary-color); /* Match new background */
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 9999;
-    transition: opacity 0.5s ease-out;
+    transition: opacity 0.5s ease-out, visibility 0.5s ease-out; /* Added visibility transition */
 }
 
 #loader:after {
     content: "";
-    width: 40px;
-    height: 40px;
-    border: 5px solid white;
-    border-top: 5px solid transparent;
+    width: 50px; /* Larger spinner */
+    height: 50px; /* Larger spinner */
+    border: 6px solid var(--text-color); /* Lighter border */
+    border-top: 6px solid var(--accent-color); /* Accent color for spinner part */
     border-radius: 50%;
-    animation: spin 1s linear infinite;
+    animation: spin 0.8s linear infinite; /* Faster spin */
 }
 
 @keyframes spin {
@@ -204,94 +446,89 @@ body {
 
 .hidden {
     opacity: 0;
-    visibility: hidden;
-}
-.resources-matlab {
-    display: flex;
-    justify-content: center;
-    padding: 10px;
+    visibility: hidden; /* Ensure it's not interactable */
 }
 
-.card-matlab {
-    background-color: #f8f9fa;
-    border: 1px solid #ddd;
+.resources-matlab { /* Container for the MATLAB card list */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centers the .card-matlab if it's narrower than container */
+    padding: 10px;
+    margin-top: 20px;
+}
+
+.resources-rf { /* Container for the RF tools cards */
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+    padding: 10px;
+    margin-top: 20px;
+}
+
+.card-matlab, .card-rf { /* Common styling for these cards */
+    background-color: var(--card-bg-color);
+    border: 1px solid var(--secondary-color); /* Darker border */
     border-radius: 12px;
-    padding: 15px 20px;
-    max-width: 700px;
+    padding: 20px 25px;
+    max-width: 750px; /* Slightly wider */
     width: 100%;
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    font-size: 14px;
+    font-family: var(--font-primary);
+    box-shadow: 0 4px 10px var(--card-shadow-color);
+    font-size: 1rem; /* Base font size */
+    margin-bottom: 20px; /* Space between cards if stacked */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-matlab:hover, .card-rf:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px var(--card-shadow-color);
 }
 
 .card-matlab ol {
-    padding-left: 20px;
+    padding-left: 25px; /* Adjusted padding */
     margin: 0;
+    list-style-type: decimal; /* Ensure numbers are visible */
 }
 
 .card-matlab li {
-    margin-bottom: 10px;
+    margin-bottom: 15px; /* Increased spacing */
+    line-height: 1.5;
 }
 
-.card-matlab a {
-    font-weight: bold;
-    color: #004080;
+.card-matlab a, .card-rf a {
+    font-weight: 600;
+    color: var(--link-color);
     text-decoration: none;
+    transition: color 0.3s ease;
 }
 
-.card-matlab a:hover {
-    text-decoration: underline;
-    color: #0066cc;
+.card-matlab a:hover, .card-rf a:hover {
+    text-decoration: none; /* No underline on hover by default for modern look */
+    color: var(--accent-color);
 }
 
-.card-matlab p {
-    margin: 4px 0 0 0;
-    color: #444;
-    line-height: 1.4;
+.card-matlab p, .card-rf p {
+    margin: 6px 0 0 0;
+    color: var(--text-color);
+    opacity: 0.85;
+    line-height: 1.5;
 }
+
+/* Specific to .card-rf if needed, but common styles are above */
 .resources-rf {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 16px;
-    padding: 10px;
+    /* If it needs to be a grid like the main .resources */
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
 }
-
 .card-rf {
-    background-color: #fefefe;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    width: 300px;
-    padding: 15px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
-    transition: transform 0.2s ease;
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-}
-
-.card-rf:hover {
-    transform: translateY(-4px);
-}
-
-.card-rf a {
-    font-weight: bold;
-    color: #004080;
-    font-size: 15px;
-    text-decoration: none;
-}
-
-.card-rf a:hover {
-    color: #0066cc;
-    text-decoration: underline;
-}
-
-.card-rf p {
-    font-size: 13px;
-    margin-top: 5px;
-    color: #444;
-    line-height: 1.4;
+    /* Individual .card-rf styles if they differ from .card-matlab */
+    /* For example, if they need different max-width or padding */
+     max-width: none; /* Override max-width from common style if needed for grid */
 }
 
 .card-rf i {
-    margin-right: 6px;
+    margin-right: 8px;
+    color: var(--accent-color);
 }
 
